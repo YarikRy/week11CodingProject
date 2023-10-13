@@ -1,0 +1,18 @@
+.box {
+    float: left;
+    width: 100px;
+    height: 100px;
+	border: 1px solid #000;
+	font-size: 85px;
+	text-align: center;
+	line-height: 100px; 
+	cursor: pointer;
+}
+
+.box:hover{
+    background: #cccccc;
+}
+
+.winner {
+    background: green;
+}
