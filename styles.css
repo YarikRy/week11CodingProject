@@ -16,3 +16,19 @@
 .winner {
     background: green;
 }
+
+.drawAlert{
+    background: #cccccc;
+    margin-bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 50px;
+    width: 60%;
+    height: 100px;
+    border: 1px solid black;
+    border-radius: 50px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

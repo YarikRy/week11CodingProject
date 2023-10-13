@@ -1,23 +1,22 @@
 let xOrO = 0
 let turn = document.getElementById('turn')
 let boxes = document.getElementsByClassName('box')
+runGame()
 
 function winner(b1, b2, b3) {
     b1.classList.add('winner')
     b2.classList.add('winner')
     b3.classList.add('winner')
     turn.innerHTML = b1.innerHTML + " is a winner"
-}
-
-function draw(){
-    for (let i = 0; i < boxes.length; i++){
-        let win = boxes[i].classList.contains('winner')
-        if (win){
-            findWinner()
-        } else {
-            turn.innerHTML = 'Its a Draw'
-        }
-    }
+    const winDiv = document.createElement('div')
+    const winContent = document.createTextNode(`${b1.innerHTML} is a winner`)
+    const aboveGrid = document.getElementById('main')
+    winDiv.appendChild(winContent)
+    document.body.appendChild(winDiv)
+    aboveGrid.appendChild(winDiv)
+    aboveGrid.parentNode.insertBefore(winDiv, aboveGrid)
+    winDiv.classList.add('drawAlert')
+    winDiv.setAttribute('id', 'win-alert')
 }
 
 function findWinner() {
@@ -57,32 +56,55 @@ function findWinner() {
     }
     
 }
-
-for(let i = 0; i < boxes.length; i++){
-    boxes[i].onclick = function() {
-        if (this.innerHTML !== 'X' && this.innerHTML !== 'O'){
-            if (xOrO % 2 === 0) {
-                this.innerHTML = 'X'
-                turn.innerHTML = 'O Turn'
-                findWinner()
-                console.log(xOrO)
-                console.log(this.innerHTML)
-                xOrO += 1
-            } else {
-                this.innerHTML = 'O'
-                turn.innerHTML = 'X Turn'
-                findWinner()
-                console.log(xOrO)
-                xOrO += 1
+function runGame() {
+    let notEmpty = 0
+    for(let i = 0; i < boxes.length; i++){
+        boxes[i].onclick = function() {
+            if (this.innerHTML !== 'X' && this.innerHTML !== 'O'){
+                if (xOrO % 2 === 0) {
+                    this.innerHTML = 'X'
+                    turn.innerHTML = 'O Turn'
+                    findWinner()
+                    console.log(xOrO)
+                    console.log(this.innerHTML)
+                    xOrO += 1
+                } else {
+                    this.innerHTML = 'O'
+                    turn.innerHTML = 'X Turn'
+                    findWinner()
+                    console.log(xOrO)
+                    xOrO += 1
+                }
+                if(boxes[i].innerHTML !== ''){
+                    notEmpty += 1
+                }
+                if(notEmpty = 8){
+                    drawOrWin()
+                }
             }
         }
     }
 }
 
+function drawOrWin(){
+    let notWinner = 0
+    for (let i = 0; i < boxes.length; i++){
+        if(boxes[i].innerHTML !== '' && !boxes[i].classList.contains('winner')){
+            console.log('Found a loser')
+            notWinner++
+        }
+    }
+    if(notWinner === 9){
+        turn.innerHTML = 'Its a Draw'
+        drawAlert()
+    } 
+}
+
 document.getElementById('btn').addEventListener('click', restart)
-document.getElementById('btn').addEventListener('click', hide)
 
 function restart(){
+    const winAlertDiv = document.getElementById('win-alert')
+    const drawAlertDiv = document.getElementById('draw-alert')
     for(let i = 0; i < boxes.length; i++){
         boxes[i].classList.remove('winner')
         boxes[i].innerHTML = ''
@@ -90,12 +112,24 @@ function restart(){
         xOrO = 0
         console.log("Restarting...")
     }
+    if(winAlertDiv != null){
+        winAlertDiv.remove()
+    }
+    if(drawAlertDiv != null){
+        drawAlertDiv.remove()
+    }
 }
 
-function hide() {
-    document.getElementById('alert').hidden = true
+function drawAlert(){
+    const drawDiv = document.createElement('div')
+    const drawContent = document.createTextNode('Its a Draw')
+    const aboveGrid = document.getElementById('main')
+    drawDiv.appendChild(drawContent)
+    document.body.appendChild(drawDiv)
+    aboveGrid.appendChild(drawDiv)
+    aboveGrid.parentNode.insertBefore(drawDiv, aboveGrid)
+    drawDiv.classList.add('drawAlert')
+    drawDiv.setAttribute('id', 'draw-alert')
 }
 
-function show() {
-    document.getElementById('alert').hidden = false
-}
+
